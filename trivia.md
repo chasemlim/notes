@@ -22,7 +22,7 @@
     - Functions stored in variables aren't hoisted
 
 ## Primitives in JavaScript
-
+----
 Primitives have no properties.
 - String
 - Number
@@ -34,7 +34,7 @@ Primitives have no properties.
 JS takes primitives and coerces them into objects.
 
 ## TRIVIA TIME
-
+----
 - Are there implicit returns in JS?
     - YES!
     - Single line arrow functions
@@ -93,3 +93,42 @@ JS takes primitives and coerces them into objects.
 
 - How could I verify whether one element is child of another?
     - child.parentNode - returns parent
+
+- What is the best way to create a DOM element?
+    - document.createElement
+
+- What is createDocumentFragment and why might you use it?
+    - Append elements onto the documentFragment and then append the documentFragment to the document all at once
+    - appending to document is expensive 
+
+- What is reflow? What causes reflow? How could you reduce reflow?
+    - Critical to performance
+    - Means you're rearranging elements on a page and pushes everything else around, forces the page to rerender and repaint all the elements you moved
+    - Want to keep reflow to minimum
+    - use createDocumentFragment to reduce reflow, less stuff moving around the page with only 1 append
+
+- What is repaint and when does this happen?
+    - Changes the document visibly but doesnt affect location or move elements on the page 
+    - Expensive but not as expensive as reflow
+
+- How could you make sure the run some JS when the DOM is ready, i.e $(document).ready?
+    - addEventListener('DOMContentLoaded', ...)
+
+- What is event bubbling?
+    - When an event happens on an el, it first runs the handlers on the el, then the parent, then all the way up the chain
+    - Capturing is the opposite of bubbling
+        - When you click on a top level el and it drills down to children
+        - Not very common
+    - 3rd argument in add event listener 'true/false' decides whether to capture events or not
+
+- What is the difference between event.target and event.currentTarget?
+
+
+- How could you destroy multiple list items with one click handler?
+    - `.removeChild()` inside of a click handler w/capture `true`
+
+- How could you capture all clicks in a page?
+    - Put event listener on window
+
+- How could you capture all the text on a web page?
+    - document.body.innerText
