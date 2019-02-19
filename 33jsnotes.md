@@ -45,3 +45,10 @@
         - Function appears in the Global Execution context
         - Local Execution Context is created to hold local variables
 
+
+## 2. Primitive Types
+
+- JavaScript Numbers
+    - Floating point
+    - Stored in binary, default output is decimal
+    
