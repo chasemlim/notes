@@ -52,3 +52,10 @@
     - Floating point
     - Stored in binary, default output is decimal
     
+
+## 3. Value vs. Reference
+
+- Primitive Types: Boolean, null, undefined, String, Number
+    - Passed by value
+- Objects: Function, Array, Object
+    - Passed by reference
