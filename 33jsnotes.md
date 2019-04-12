@@ -59,3 +59,5 @@
     - Passed by value
 - Objects: Function, Array, Object
     - Passed by reference
+- Variables that are assigned a non-primitive value are given a reference to that value. That reference points to the object’s location in memory. The variables don’t actually contain the value.
+- When we write arr = [], we’ve created an array in memory. What the variable arr receives is the address, the location, of that array.
