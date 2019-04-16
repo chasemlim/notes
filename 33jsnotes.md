@@ -61,3 +61,80 @@
     - Passed by reference
 - Variables that are assigned a non-primitive value are given a reference to that value. That reference points to the object’s location in memory. The variables don’t actually contain the value.
 - When we write arr = [], we’ve created an array in memory. What the variable arr receives is the address, the location, of that array.
+
+## 4. Implicit, Explicit, Nominal, Structuring and Duck Typing
+
+- Passing a string into a numeric expression is similar to calling `Number` function on the value
+- Any string containing numeric characters only converts to number equivalent `("1")`
+- Non-numerics present in a string return `NaN` ex. `("1,")`
+- When a string is an operand of `+`, JS converts the number to a string
+`1 + "2" = "12"`
+- Most JS Object conversions result in `[object Object]`
+`"name" + {} = "name[object Object]`
+- EVERY JS Object inherits a `toString` method, called whenever an obj is to be converted to a string - return value of this method is used for string concatenation and mathematical expressions
+```js
+const foo = {}
+foo.toString() // [object Object]
+
+const baz = {
+  toString: () => "I'm object baz"
+}
+
+baz + "!" // "I'm object baz!"
+```
+
+- For mathematical expressions, JS attempts to convert return value to number if it's not already
+```js
+const foo = {
+  toString: () => 4
+}
+
+2 * foo // 8
+2 / foo // 0.5
+2 + foo // 6
+"four" + foo // "four4"
+
+const baz = {
+  toString: () => "four"
+}
+
+2 * baz // NaN
+2 + baz // 2four
+
+const bar = {
+  toString: () => "2"
+}
+
+2 + bar // "22"
+2 * bar // 4
+```
+
+- Array `toString` method works like calling `.join()`
+`[1,2,3].toString() // "1,2,3"`
+```js
+"me" + [1,2,3] // "me1,2,3"
+4 + [1,2,3] // "41,2,3"
+4 * [1,2,3] // NaN
+```
+
+### `valueOf` method
+
+- Can define a `valueOf` method on an object for numeric or string operations
+```js
+const foo = {
+  valueOf: () => 3
+}
+
+3 + foo // 6
+3 * foo // 9
+```
+- valueOf takes priority over toString on an object if valueOf is defined
+- The valueOf method is intended for Objects that are supposed to represent a numeric value
+
+### NaN
+
+- `NaN` is the only JS value not equal to itself
+- `Number.isNaN`
+
+## 5. == vs === vs typeof
+
