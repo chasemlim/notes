@@ -138,3 +138,58 @@ const foo = {
 
 ## 5. == vs === vs typeof
 
+### `===`
+- Strict equality
+- Type and value must be identical
+
+### `==`
+- Loose equality
+- Performs type coercion
+
+
+### duck-typing
+- Checking the behavior to verify if an object or value really is a certain type
+```js
+function isArray(obj){
+    return (typeof(obj.length)=="undefined") ?
+        false:true;
+}
+```
+- duck-typing is inexact, has false positives, and there are multiple ways of approaching it
+
+## 17. Prototype Inheritance and Prototype Chain
+
+- JavaScript classes introduced in ECMAScript 2015 are basically just syntactical sugar for the pre-existing prototype-based inheritance
+- Added OOP features like `class`, `constructor`, `super`, `extends`, `static`, etc
+
+### Optimization
+
+- Bytecode is shorter and more compact, is created faster, but requires an interpreter to run
+- Machine code is much longer and requires a compiler to create, but can be ran much faster and more efficiently
+- `Shape` of an object is the structure of the object
+```js
+{
+    x: .....
+    y: .....
+}
+```
+- `Shape` contains all property names and attributes, but no values
+    - Contains the **offset** of the values inside the object, so the JS engine knows where to look
+- `Shape` optimizes value lookup by allowing every `object` with the same shape to point to this `Shape` instance, so the `object` only has to store values unique to it
+- Note: `{ x: ..., y: ... }` has a different shape than `{ y: ..., x: ... }`. Order in which properties are added affects the shape
+- JS Engines use a `ShapeTable` data structure to speed up searching for properties
+    - Effectively a dictionary, mapping property keys to respective `Shape`s that introduce the given property
+- `Shape`s enable use of Inline Caches
+
+### Inline Caches
+- ICs are a big reason why JS runs fast
+- ICs are used to memorize information on where to find properties on objects, reducing # of expensive lookups
+
+- To optimize `prototype` access, JS engines store the prototype link on the `Shape` instead of the object instance
+- When the prototype changes, the `Shape` of the object changes as well
+- `ValidityCell` is an association that verifies if the prototype it's associated with or any prototype above it in the chain has been changed
+    - Invalidated when there's a change
+- On V8 engine, `InlineCache` is used to store the `ValidityCell` of the immediate linked prototype, the `prototype`, the `shape` of the instance, and the property `offset`
+- When the prototype is changed, a new shape is allocated, and the previous `ValidityCell` is invalidated, making the IC miss, which worsens performance
+- Performance impact worsens the further down the prototype chain you are, as it affects all object prototype above it
+- Practical tip: **Don't mess with prototypes**, and if you need to, then do it before other code runs to optimize runtime
