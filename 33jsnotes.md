@@ -193,3 +193,27 @@ function isArray(obj){
 - When the prototype is changed, a new shape is allocated, and the previous `ValidityCell` is invalidated, making the IC miss, which worsens performance
 - Performance impact worsens the further down the prototype chain you are, as it affects all object prototype above it
 - Practical tip: **Don't mess with prototypes**, and if you need to, then do it before other code runs to optimize runtime
+
+## Prototypes
+
+- Prototype is an object that exists as a property on every function in JavaScript
+- Contains methods such as `constructor`, which is accessed by keyword `new`
+- `extends` keyword adds a `prototype` reference from the previous class to the new prototype
+    - Provides access to both the previous classes methods and the new ones
+    - Can extend any expression or function
+```js
+function f(phrase) {
+  return class {
+    sayHi() { alert(phrase) }
+  }
+}
+
+class User extends f("Hello") {}
+
+new User().sayHi(); // Hello
+```
+- Results in `User` inheriting the result of `f("Hello")`
+
+## `super`
+- ES6 arrow functions don't have `super`
+- When `extend`ing a class, must use `super` to access previous constructor methods and parameters
