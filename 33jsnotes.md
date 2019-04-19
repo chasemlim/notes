@@ -217,3 +217,86 @@ new User().sayHi(); // Hello
 ## `super`
 - ES6 arrow functions don't have `super`
 - When `extend`ing a class, must use `super` to access previous constructor methods and parameters
+
+## 30. Inheritance, Polymorphism and Code Reuse
+
+### Polymorphism
+- The ability to write a single function that handles many data-types
+- Fundamentally identical to abstraction
+- In OOP context, polymorphism usually refers to overriding inherited methods to facilitate callling the same method on different objects
+- a.k.a "One Size Fits All"
+- Issue with longterm polymorphism:
+    - Forms of data the program will encounter and the operations it will perform will not likely remain constant in the future
+    - How do you account for a new datatype?
+- Clojurian method: use protocols
+    - Protocols specify certain functions as a baseline interface, implement them differently for unique data types, dispatch on the type of the first argument, and extend them to new datatypes
+    - Avoid namespace collision
+- Typical common solution:
+    - Go back and change interfaces to support new datatype
+        - Violates the "O" in SOLID (open for extension, closed for modification)
+    - Directly add or override the methods (monkey-patch) required by the interface on the new datatype
+
+### Implementation
+- Polymorphism is either 'ad hoc' or 'universal'
+- Ad hoc:
+    - When a function call results in a dispatch to one of one or more type-specific functions depending on argument type
+    - Either coerce the argument to a single type
+        - Only one implementation is necessary
+    - Or overload the function to cover all bases for each argument type
+- Subtype:
+    - Specific to OOP
+    - Class method can be called with an infinite number of types - aka any class which inherits from the original class
+    - Call is dynamically bound to the implementation on the particular subtype
+- Parametric:
+    - Function which can be called with an infinite number of types unrelated by inheritance
+    - Has a single functional form across all types
+        - Performs the same operation irregardless of what type is passed
+    
+## 9. Message Queue and Event Loop
+- JavaScript - single threaded
+    - Only one thing happens at a time
+    - Simplifies how you program without worrying about concurrency issues
+    - Have to avoid things that can block the thread, like synchronous network calls or infinite loops
+- Callbacks, promises, and async/await exist to help prevent the thread from getting clogged up
+
+### Call Stack
+- LIFO Stack
+- Event loop continuously checks the call stack to see if there's any functions to run
+- While checking, adds any function calls it finds to the call stack and executes each in order
+
+### ES6 Job Queue
+- Used by Promises to execute the result of an async function ASAP, without having to put it at the end of the call stack
+- Promises that resolve before the current function ends will execute right after the current function
+- Analogy: 
+    - Standing in line for a rollercoaster - Message Queue
+    - Fastpass ticket - Job Queue
+
+## What happens when you type google.com and press enter
+
+1. Browser checks the cache for a DNS record to find the corresponding IP address
+    - First checks browser cache
+    - Next checks the OS cache
+    - Next checks the router cache
+    - Lastly checks ISP cache
+2. If request URL is not in cache, the DNS server initiates a DNS query to find the IP and the server that hosts google.com
+    - DNS query searches multiple DNS servers on the internet
+    - Search bounces from DNS server to DNS server until it either finds the IP address or returns a response saying it was unable to find it
+        - Called a recursive search
+3. Browser initiates a TCP connection with the server
+    - After receiving the correct IP address it builds a connection with the server, most likely with TCP protocol
+### TCP/IP three-way handshake
+- A three step process where the client and server exchange SYN(synchronize) and ACK(acknowledge) messages to establish connection
+    
+    1. Client machine sends a SYN packet to the server asking if it is open for new connections
+    2. If the server has open ports that can accept and initiate new connections, it will respond with an acknowledgment of the SYN packet using a SYN/ACK packet
+    3. The client will receive the SYN/ACK packet from the server and acknowledge it by sending an ACK packet
+4. The browser sends an HTTP request to the web server
+    - Browser sends a GET request asking for google.com web page
+5. The server handles the request and sends back a response
+    - Server receives the request and passes it to a request handler to read and generate a response
+    - Request handler processes the request and assembles a formatted response (JSON, XML, HTML)
+6. Server sends out an HTTP response
+    - Server response contains the web page requested as well as status code and other details
+7. The browser displays the HTML content
+    - Renders out the HTML skeleton
+    - Checks the HTML tags and sends out GET requests for additional elements (images, stylesheets, JS files)
