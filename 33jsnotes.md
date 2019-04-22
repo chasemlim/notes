@@ -300,3 +300,75 @@ new User().sayHi(); // Hello
 7. The browser displays the HTML content
     - Renders out the HTML skeleton
     - Checks the HTML tags and sends out GET requests for additional elements (images, stylesheets, JS files)
+
+## JavaScript Stuff
+
+### XSS Attacks (Cross-Site Scripting)
+
+- Vulnerability where an attacker executes their own code on your website
+- Runs untrusted code on your app
+- This attack happens in the client's browser
+- Ex. open input on the browser page and attacker inputs the below
+![xss](https://cdn-images-1.medium.com/max/800/1*MpbN-KI-f30ortXO5mJx7g.png)
+
+- Solution: Escape user input
+    - Convert characters to their plain text equivalents `<` => `&lt;`
+    - If user is allowed to input HTML, ensure usage of attributes is impossible
+        - Can abuse onClick or onLoad
+
+### CSRF Attacks (Cross-Site Request Forgery)
+
+- Attack where the attacker forces an end user to execute actions on a web app where they're currently authenticated
+- Hijacks authentication
+- Processes an attacker-specified request within the context of the victim's authenticated session
+- Can attack web forms or API endpoints
+- Ex. creating a pre-filled form that uses signed in bank credentials in the user cookie to transfer money
+![1](https://cdn-images-1.medium.com/max/800/1*pF2Dt4PjZ__4u-esuALC4Q.png)
+![2](https://cdn-images-1.medium.com/max/800/1*vTOcnty81S2ttkNjXtquJw.png)
+- The above has a prefilled amount and bank account, and submits the hidden form automatically when the user visits the website
+- Solution: use a token to protect the form
+    - Token is a randomly generated value only known to the server
+    - Token is included in the form with a simple hidden input and changes each request
+- If the token doesn't match the server record, the request will be rejected
+- Another example:
+    - Attacker can clone a form from the vulnerable site, populate fields with values, and use JavaScript to autosubmit
+
+## DOM and CSS Manipulation
+
+### DOM
+- QuerySelector / FindElementById etc
+- `let p = createElement('p')`
+- `para.appendChild(p)`
+- `createTextNode('...')`
+- removeChild
+- removing a node based on a reference to itself
+    - `linkPara.parentNode.removeChild(linkPara);`
+
+### CSS
+- Document.stylesheets
+    - returns an array of `CSSStyleSheet` objects
+    - Old and archaic way
+- Use `.style.attribute` to add inline styling
+```js
+para.style.color = 'white';
+para.style.backgroundColor = 'black';
+para.style.padding = '10px';
+para.style.width = '250px';
+para.style.textAlign = 'center';
+```
+- Alternate way
+```html
+<style>
+.highlight {
+  color: white;
+  background-color: black;
+  padding: 10px;
+  width: 250px;
+  text-align: center;
+}
+</style>
+```
+```js
+para.setAttribute('class', 'highlight');
+```
+- Can also source classes from CSS or SCSS docs
